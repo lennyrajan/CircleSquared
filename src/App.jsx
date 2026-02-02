@@ -12,6 +12,7 @@ function App() {
   const [onboarded, setOnboarded] = useLocalStorage('cs_onboarded', false);
   const [friends, setFriends] = useLocalStorage('cs_friends', []);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [showHealthMessage, setShowHealthMessage] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 800);
@@ -21,6 +22,29 @@ function App() {
   const handleAddFriend = (newFriend) => {
     setFriends([...friends, newFriend]);
     setIsAddModalOpen(false);
+  };
+
+  const handleLogInteraction = (friendId) => {
+    const updatedFriends = friends.map(f => {
+      if (f.id === friendId) {
+        return {
+          ...f,
+          lastInteraction: new Date().toISOString(),
+          interactions: [...(f.interactions || []), { date: new Date().toISOString() }]
+        };
+      }
+      return f;
+    });
+    setFriends(updatedFriends);
+  };
+
+  const clearAllData = () => {
+    if (confirm("Are you sure you want to clear all your data? This cannot be undone.")) {
+      setFriends([]);
+      setOnboarded(false);
+      localStorage.clear();
+      window.location.reload();
+    }
   };
 
   if (loading) {
@@ -71,11 +95,32 @@ function App() {
             <header>
               <h2 className="section-title">Social Health</h2>
               <div className="header-actions">
-                <div className="health-badge">
-                  <Heart size={14} fill={healthScore > 70 ? 'var(--color-teal)' : 'var(--color-amber)'} />
-                  {healthScore}%
+                <div
+                  className="health-badge-container"
+                  onMouseEnter={() => setShowHealthMessage(true)}
+                  onMouseLeave={() => setShowHealthMessage(false)}
+                >
+                  <div className="health-badge">
+                    <Heart size={14} fill={healthScore > 70 ? 'var(--color-teal)' : 'var(--color-amber)'} />
+                    {healthScore}%
+                  </div>
+                  <AnimatePresence>
+                    {showHealthMessage && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                        className="health-overlay glass-card"
+                      >
+                        <h4>Social Vitality</h4>
+                        <p>{healthScore > 80 ? 'Excellent! Your circles are flourishing.' :
+                          healthScore > 50 ? 'Good, but some connections are drifting.' :
+                            'Time to reach out! Your social health needs attention.'}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <button className="icon-btn"><Settings size={20} /></button>
+                <button className="icon-btn" onClick={clearAllData} title="Clear All Data (Settings)"><Settings size={20} /></button>
               </div>
             </header>
 
@@ -101,12 +146,14 @@ function App() {
                 <div className="friend-list-mini">
                   {friends.map(friend => (
                     <div key={friend.id} className="friend-item-mini">
-                      <div className="friend-avatar-mini">{friend.name.charAt(0)}</div>
+                      <div className="friend-avatar-mini">
+                        {friend.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
                       <div className="friend-info-mini">
                         <span className="friend-name">{friend.name}</span>
                         <span className="friend-level-tag">{friend.level}</span>
                       </div>
-                      <button className="log-btn">Log</button>
+                      <button className="log-btn" onClick={() => handleLogInteraction(friend.id)}>Log</button>
                     </div>
                   ))}
                 </div>

@@ -230,6 +230,35 @@
   box-shadow: var(--shadow-soft);
 }
 
+.health-badge-container {
+  position: relative;
+  cursor: help;
+}
+
+.health-overlay {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 220px;
+  padding: 1.2rem;
+  margin-top: 0.8rem;
+  z-index: 1000;
+  text-align: left;
+}
+
+.health-overlay h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-charcoal);
+  font-weight: 800;
+}
+
+.health-overlay p {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.5;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -314,13 +343,20 @@
   font-size: 0.8rem;
   background: var(--color-amber);
   color: var(--color-charcoal);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
 }
 
-.friend-node {
+.log-btn:active {
+  transform: scale(0.95);
+}
+
+.friend-node-circle {
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.friend-node:hover {
-  r: 15;
+.friend-node-group:hover .friend-node-circle {
+  r: 20;
 }
