@@ -68,7 +68,8 @@ export function SettingsModal({ isOpen, onClose, friends, onImport, onClear }) {
                             <aside className="settings-sidebar">
                                 {sections.map(s => (
                                     <button key={s.id} className={`sidebar-item ${activeSection === s.id ? 'active' : ''}`} onClick={() => setActiveSection(s.id)}>
-                                        {s.icon} <span>{s.label}</span>
+                                        <div className="sidebar-icon">{s.icon}</div>
+                                        <span className="sidebar-label">{s.label}</span>
                                     </button>
                                 ))}
                             </aside>
