@@ -74,7 +74,7 @@ export function CircleViz({ friends }) {
                 {/* Ring Labels */}
                 <text y={-RELATIONSHIP_LEVELS.PRIMARY.radius - 5} textAnchor="middle" fontSize="8" fill="#aaa" fontWeight="800">PRIMARY (0-30d)</text>
                 <text y={-RELATIONSHIP_LEVELS.SECONDARY.radius - 5} textAnchor="middle" fontSize="8" fill="#aaa" fontWeight="800">SECONDARY (31-90d)</text>
-                <text y={-RELATIONSHIP_LEVELS.PERIPHERAL.radius - 5} textAnchor="middle" fontSize="8" fill="#aaa" fontWeight="800">PERIPHERAL (>90d)</text>
+                <text y={-RELATIONSHIP_LEVELS.PERIPHERAL.radius - 5} textAnchor="middle" fontSize="8" fill="#aaa" fontWeight="800">PERIPHERAL ({">"}90d)</text>
 
                 {/* Nodes */}
                 {renderFriendNodes(categorizedFriends.peripheral, RELATIONSHIP_LEVELS.PERIPHERAL.radius, 'peripheral')}

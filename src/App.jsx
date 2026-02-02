@@ -5,6 +5,7 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { CircleViz } from './components/CircleViz';
 import { AddFriendModal } from './components/AddFriendModal';
 import { FriendProfile } from './components/FriendProfile';
+import { SettingsModal } from './components/SettingsModal';
 import { getSocialHealthScore, getUpcomingEvents } from './utils/socialHealth';
 import './App.css';
 
@@ -13,6 +14,7 @@ function App() {
   const [onboarded, setOnboarded] = useLocalStorage('cs_onboarded', false);
   const [friends, setFriends] = useLocalStorage('cs_friends', []);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedFriendId, setSelectedFriendId] = useState(null);
   const [showHealthMessage, setShowHealthMessage] = useState(false);
 
@@ -40,13 +42,16 @@ function App() {
     setFriends(updatedFriends);
   };
 
-  const clearAllData = () => {
-    if (confirm("Are you sure you want to clear all your data? This cannot be undone.")) {
-      setFriends([]);
-      setOnboarded(false);
-      localStorage.clear();
-      window.location.reload();
-    }
+  const handleImportData = (newFriends) => {
+    setFriends(newFriends);
+    setIsSettingsOpen(false);
+  };
+
+  const handleClearData = () => {
+    setFriends([]);
+    setOnboarded(false);
+    localStorage.clear();
+    window.location.reload();
   };
 
   if (loading) {
@@ -103,7 +108,7 @@ function App() {
                     )}
                   </AnimatePresence>
                 </div>
-                <button className="icon-btn" onClick={clearAllData} title="Clear All Data"><Settings size={20} /></button>
+                <button className="icon-btn" onClick={() => setIsSettingsOpen(true)} title="Settings"><Settings size={20} /></button>
               </div>
             </header>
 
@@ -163,6 +168,13 @@ function App() {
 
             <AddFriendModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={handleAddFriend} />
             <FriendProfile friend={selectedFriend} isOpen={!!selectedFriendId} onClose={() => setSelectedFriendId(null)} onLogInteraction={handleLogInteraction} />
+            <SettingsModal
+              isOpen={isSettingsOpen}
+              onClose={() => setIsSettingsOpen(false)}
+              friends={friends}
+              onImport={handleImportData}
+              onClear={handleClearData}
+            />
           </div>
         )}
       </main>
