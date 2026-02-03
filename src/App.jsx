@@ -92,7 +92,7 @@ function App() {
         {onboarded && (
           <div className="dashboard-view">
             <header className="glass-header">
-              <h1 className="section-title">Circles<sup>2</sup></h1>
+              <h1 className="section-title">Circle<sup>2</sup></h1>
               <div className="header-actions">
                 <div className="health-badge-container" onMouseEnter={() => setShowHealthMessage(true)} onMouseLeave={() => setShowHealthMessage(false)}>
                   <div className="health-badge">
@@ -108,6 +108,9 @@ function App() {
                     )}
                   </AnimatePresence>
                 </div>
+                <button className="icon-btn add-trigger" onClick={() => setIsAddModalOpen(true)} title="Add Connection">
+                  <Plus size={22} />
+                </button>
                 <button className="icon-btn settings-trigger" onClick={() => setIsSettingsOpen(true)} title="Settings">
                   <Settings size={22} />
                 </button>
@@ -120,7 +123,6 @@ function App() {
               <div className="quick-actions glass-card">
                 <div className="section-header">
                   <h3>Relationship Feed</h3>
-                  <button className="add-small-btn" onClick={() => setIsAddModalOpen(true)}><Plus size={16} /> Add</button>
                 </div>
                 {friends.length === 0 ? (
                   <div className="empty-state-mini">
