@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { RELATIONSHIP_LEVELS, calculateDrift } from '../utils/socialHealth';
 
-export function CircleViz({ friends }) {
+export function CircleViz({ friends, onSelectFriend }) {
     const getTier = (friend) => {
         const { daysSince } = calculateDrift(friend.lastInteraction, friend.cadence || 30);
         if (daysSince <= 30) return 'primary';
@@ -35,6 +35,8 @@ export function CircleViz({ friends }) {
                     layout
                     initial={{ scale: 0 }}
                     animate={{ scale: 1, x, y }}
+                    whileHover={{ scale: 1.2, zIndex: 100 }}
+                    onClick={() => onSelectFriend(friend.id)}
                     transition={{ type: 'spring', damping: 15, stiffness: 100 }}
                     className="friend-node-group clickable"
                 >
@@ -44,7 +46,6 @@ export function CircleViz({ friends }) {
                         stroke={isDrifting ? 'white' : RELATIONSHIP_LEVELS[tierKey.toUpperCase()]?.color || '#ccc'}
                         strokeWidth="3"
                         className="friend-node-circle"
-                        style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }}
                     />
                     <text
                         dy=".3em"

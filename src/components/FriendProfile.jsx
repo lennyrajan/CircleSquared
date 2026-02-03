@@ -40,8 +40,11 @@ export function FriendProfile({ friend, isOpen, onClose, onLogInteraction }) {
 
                         <div className="panel-content">
                             <div className="action-bar">
-                                <button className="log-btn primary" onClick={() => onLogInteraction(friend.id)}>
-                                    <Clock size={16} /> Log Interaction
+                                <button
+                                    className={`log-btn primary ${loggingFeedback?.[friend.id] === 'success' ? 'success' : ''}`}
+                                    onClick={() => onLogInteraction(friend.id)}
+                                >
+                                    <Clock size={16} /> {loggingFeedback?.[friend.id] === 'success' ? 'Interaction Logged' : 'Log Interaction'}
                                 </button>
                             </div>
 

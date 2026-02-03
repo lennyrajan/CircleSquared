@@ -17,6 +17,7 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedFriendId, setSelectedFriendId] = useState(null);
   const [showHealthMessage, setShowHealthMessage] = useState(false);
+  const [loggingFeedback, setLoggingFeedback] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 800);
@@ -40,6 +41,16 @@ function App() {
       return f;
     });
     setFriends(updatedFriends);
+
+    // Visual feedback logic
+    setLoggingFeedback(prev => ({ ...prev, [friendId]: 'success' }));
+    setTimeout(() => {
+      setLoggingFeedback(prev => {
+        const next = { ...prev };
+        delete next[friendId];
+        return next;
+      });
+    }, 2000);
   };
 
   const handleImportData = (newFriends) => {
@@ -117,7 +128,7 @@ function App() {
               </div>
             </header>
 
-            <CircleViz friends={friends} />
+            <CircleViz friends={friends} onSelectFriend={setSelectedFriendId} />
 
             <div className="dashboard-grid">
               <div className="quick-actions glass-card">
@@ -140,7 +151,12 @@ function App() {
                           <span className="friend-name">{friend.name}</span>
                           <span className="friend-level-tag">{friend.level}</span>
                         </div>
-                        <button className="log-btn" onClick={(e) => { e.stopPropagation(); handleLogInteraction(friend.id); }}>Log</button>
+                        <button
+                          className={`log-btn ${loggingFeedback[friend.id] === 'success' ? 'success' : ''}`}
+                          onClick={(e) => { e.stopPropagation(); handleLogInteraction(friend.id); }}
+                        >
+                          {loggingFeedback[friend.id] === 'success' ? 'Logged' : 'Log'}
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -171,7 +187,7 @@ function App() {
             </div>
 
             <AddFriendModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={handleAddFriend} />
-            <FriendProfile friend={selectedFriend} isOpen={!!selectedFriendId} onClose={() => setSelectedFriendId(null)} onLogInteraction={handleLogInteraction} />
+            <FriendProfile friend={selectedFriend} isOpen={!!selectedFriendId} onClose={() => setSelectedFriendId(null)} onLogInteraction={handleLogInteraction} loggingFeedback={loggingFeedback} />
             <SettingsModal
               isOpen={isSettingsOpen}
               onClose={() => setIsSettingsOpen(false)}
