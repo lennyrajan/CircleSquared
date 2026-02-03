@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Heart, Baby, Dog, Utensils, Coffee, DollarSign, Calendar, MapPin, Tag, MessageSquare, Clock, Info } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
-export function FriendProfile({ friend, isOpen, onClose, onLogInteraction }) {
+export function FriendProfile({ friend, isOpen, onClose, onLogInteraction, loggingFeedback }) {
     if (!friend) return null;
 
     const formatDate = (dateStr) => {

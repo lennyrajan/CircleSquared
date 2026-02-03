@@ -246,7 +246,7 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                 </div>
 
                                 <div className="modal-footer">
-                                    <button type="submit" className="submit-btn primary-btn">Build Relationship Intel</button>
+                                    <button type="submit" className="submit-btn primary-btn">Save</button>
                                 </div>
                             </form>
                         </motion.div>

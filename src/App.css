@@ -179,6 +179,13 @@ main {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.expanded-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 /* CircleViz Scaling */
 .circle-viz-container {
   margin: 1.5rem 0;
