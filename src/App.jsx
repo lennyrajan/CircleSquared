@@ -91,13 +91,13 @@ function App() {
 
         {onboarded && (
           <div className="dashboard-view">
-            <header>
-              <h2 className="section-title">Intelligence Dashboard</h2>
+            <header className="glass-header">
+              <h1 className="section-title">Circles<sup>2</sup></h1>
               <div className="header-actions">
                 <div className="health-badge-container" onMouseEnter={() => setShowHealthMessage(true)} onMouseLeave={() => setShowHealthMessage(false)}>
                   <div className="health-badge">
                     <Heart size={14} fill={healthScore > 70 ? 'var(--color-teal)' : 'var(--color-amber)'} />
-                    {healthScore}%
+                    <span>{healthScore}%</span>
                   </div>
                   <AnimatePresence>
                     {showHealthMessage && (
@@ -108,7 +108,9 @@ function App() {
                     )}
                   </AnimatePresence>
                 </div>
-                <button className="icon-btn" onClick={() => setIsSettingsOpen(true)} title="Settings"><Settings size={20} /></button>
+                <button className="icon-btn settings-trigger" onClick={() => setIsSettingsOpen(true)} title="Settings">
+                  <Settings size={22} />
+                </button>
               </div>
             </header>
 
