@@ -12,11 +12,15 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
         cadence: 30,
         category: 'Good Friend',
         howMet: '',
-        birthday: '',
+
+        // Improved Birthday Handling
+        birthDay: '',
+        birthMonth: '',
+        birthYear: '',
 
         // Family
         partnerName: '',
-        partnerBirthday: '',
+        partnerBirthday: '', // Will keep standard for non-primary profile dates for now, or simplify all
         anniversary: '',
         kids: [], // { name, birthday }
         pets: [], // { name, type, birthday }
@@ -33,14 +37,23 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Reconstruct birthday
+        let fullBirthday = '';
+        if (formData.birthYear && formData.birthMonth && formData.birthDay) {
+            fullBirthday = `${formData.birthYear}-${formData.birthMonth.padStart(2, '0')}-${formData.birthDay.padStart(2, '0')}`;
+        }
+
         onAdd({
             ...formData,
+            birthday: fullBirthday,
             id: Date.now().toString(),
             lastInteraction: new Date().toISOString(),
             interactions: [],
             notesCount: formData.notes ? 1 : 0
         });
-        // Reset after add
+
+        // Reset
         setActiveTab('core');
     };
 
@@ -72,6 +85,11 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
         { id: 'lifestyle', label: 'Lifestyle', icon: <Utensils size={16} /> }
     ];
 
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -85,7 +103,7 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                             className="modal-content expanded-modal glass-card"
                         >
                             <div className="modal-header">
-                                <h2>Add Relationship Intelligence</h2>
+                                <h2>Build Profile</h2>
                                 <button onClick={onClose} className="icon-btn"><X /></button>
                             </div>
 
@@ -107,17 +125,17 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                         <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
                                             <div className="form-group">
                                                 <label>Full Name *</label>
-                                                <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. John Doe" required />
+                                                <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="John Doe" required />
                                             </div>
                                             <div className="form-row">
                                                 <div className="form-group flex-1">
-                                                    <label>Tier</label>
+                                                    <label>Social Tier</label>
                                                     <select value={formData.level} onChange={(e) => setFormData({ ...formData, level: e.target.value })}>
                                                         {Object.values(RELATIONSHIP_LEVELS).map(l => <option key={l.id} value={l.id}>{l.label.split(' ')[0]}</option>)}
                                                     </select>
                                                 </div>
                                                 <div className="form-group flex-1">
-                                                    <label>Cadence</label>
+                                                    <label>Interaction Cadence</label>
                                                     <select value={formData.cadence} onChange={(e) => setFormData({ ...formData, cadence: parseInt(e.target.value) })}>
                                                         {Object.values(CADENCES).map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                                     </select>
@@ -125,7 +143,14 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                             </div>
                                             <div className="form-group">
                                                 <label>Birthday</label>
-                                                <input type="date" value={formData.birthday} onChange={(e) => setFormData({ ...formData, birthday: e.target.value })} />
+                                                <div className="form-row">
+                                                    <select className="flex-1" value={formData.birthMonth} onChange={(e) => setFormData({ ...formData, birthMonth: e.target.value })}>
+                                                        <option value="">Month</option>
+                                                        {months.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
+                                                    </select>
+                                                    <input type="number" placeholder="Day" className="flex-1" min="1" max="31" value={formData.birthDay} onChange={(e) => setFormData({ ...formData, birthDay: e.target.value })} />
+                                                    <input type="number" placeholder="Year (e.g. 1990)" className="flex-1" min="1900" max={new Date().getFullYear()} value={formData.birthYear} onChange={(e) => setFormData({ ...formData, birthYear: e.target.value })} />
+                                                </div>
                                             </div>
                                         </motion.div>
                                     )}
@@ -134,7 +159,7 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                         <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
                                             <div className="form-group">
                                                 <label>Nickname / Pronouns</label>
-                                                <input type="text" value={formData.nickname} onChange={(e) => setFormData({ ...formData, nickname: e.target.value })} placeholder="e.g. Johnny / He,Him" />
+                                                <input type="text" value={formData.nickname} onChange={(e) => setFormData({ ...formData, nickname: e.target.value })} placeholder="Johnny / He,Him" />
                                             </div>
                                             <div className="form-group">
                                                 <label>Relationship Category</label>
@@ -143,8 +168,8 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                                 </select>
                                             </div>
                                             <div className="form-group">
-                                                <label>How you met</label>
-                                                <textarea value={formData.howMet} onChange={(e) => setFormData({ ...formData, howMet: e.target.value })} placeholder="Story behind the connection..." rows="3" />
+                                                <label>Origin Story</label>
+                                                <textarea value={formData.howMet} onChange={(e) => setFormData({ ...formData, howMet: e.target.value })} placeholder="How did this connection begin?" rows="4" />
                                             </div>
                                         </motion.div>
                                     )}
@@ -152,8 +177,8 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                     {activeTab === 'family' && (
                                         <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="scroll-area">
                                             <div className="form-group">
-                                                <label>Partner Name</label>
-                                                <input type="text" value={formData.partnerName} onChange={(e) => setFormData({ ...formData, partnerName: e.target.value })} placeholder="Spouse/Partner" />
+                                                <label>Partner / Spouse</label>
+                                                <input type="text" value={formData.partnerName} onChange={(e) => setFormData({ ...formData, partnerName: e.target.value })} placeholder="Name" />
                                             </div>
                                             <div className="form-row">
                                                 <div className="form-group flex-1">
@@ -182,7 +207,7 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                                 {formData.pets.map((pet, i) => (
                                                     <div key={i} className="form-row nested-row">
                                                         <input type="text" value={pet.name} onChange={(e) => updatePet(i, 'name', e.target.value)} placeholder="Name" />
-                                                        <input type="text" value={pet.type} onChange={(e) => updatePet(i, 'type', e.target.value)} placeholder="Type (Dog, Cat...)" />
+                                                        <input type="text" value={pet.type} onChange={(e) => updatePet(i, 'type', e.target.value)} placeholder="Type" />
                                                     </div>
                                                 ))}
                                                 <button type="button" onClick={addPet} className="add-nested-btn">+ Add Pet</button>
@@ -193,7 +218,7 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                     {activeTab === 'lifestyle' && (
                                         <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
                                             <div className="form-group">
-                                                <label>Food Preferences / Allergies</label>
+                                                <label>Food Context</label>
                                                 <div className="chip-cloud">
                                                     {FOOD_PREFERENCES.map(pref => (
                                                         <button key={pref} type="button" className={`chip ${formData.foodPrefs.includes(pref) ? 'active' : ''}`} onClick={() => toggleFoodPref(pref)}>{pref}</button>
@@ -202,10 +227,10 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                             </div>
                                             <div className="form-group">
                                                 <label>Drink Preferences</label>
-                                                <input type="text" value={formData.drinkPrefs} onChange={(e) => setFormData({ ...formData, drinkPrefs: e.target.value })} placeholder="Coffee, Tea, Wine..." />
+                                                <input type="text" value={formData.drinkPrefs} onChange={(e) => setFormData({ ...formData, drinkPrefs: e.target.value })} placeholder="Coffee, Wine..." />
                                             </div>
                                             <div className="form-group">
-                                                <label>Budget Preference</label>
+                                                <label>Budget Dynamic</label>
                                                 <div className="segmented-control">
                                                     {BUDGET_PREFERENCES.map(b => (
                                                         <button key={b} type="button" className={formData.budget === b ? 'active' : ''} onClick={() => setFormData({ ...formData, budget: b })}>{b}</button>
@@ -214,14 +239,14 @@ export function AddFriendModal({ isOpen, onClose, onAdd }) {
                                             </div>
                                             <div className="form-group">
                                                 <label>Activity Preferences</label>
-                                                <input type="text" value={formData.activityPrefs} onChange={(e) => setFormData({ ...formData, activityPrefs: e.target.value })} placeholder="Hiking, Board games, Movies..." />
+                                                <input type="text" value={formData.activityPrefs} onChange={(e) => setFormData({ ...formData, activityPrefs: e.target.value })} placeholder="Movies, Hiking..." />
                                             </div>
                                         </motion.div>
                                     )}
                                 </div>
 
                                 <div className="modal-footer">
-                                    <button type="submit" className="submit-btn primary-btn">Build Intelligence</button>
+                                    <button type="submit" className="submit-btn primary-btn">Build Relationship Intel</button>
                                 </div>
                             </form>
                         </motion.div>

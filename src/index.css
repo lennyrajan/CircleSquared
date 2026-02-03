@@ -4,27 +4,27 @@
   --color-teal: #219EBC;
   --color-blue-dark: #023047;
   --color-midnight: #0B0E14;
-  /* Deep Midnight Grey */
   --color-charcoal-light: #1A212D;
   --color-white: #FFFFFF;
 
   /* UI Contextual Colors */
   --bg-primary: var(--color-midnight);
   --text-primary: #F1F5F9;
-  /* Brighter white for crispness */
   --text-secondary: #94A3B8;
   --accent-primary: var(--color-amber);
   --accent-secondary: var(--color-teal);
 
-  /* Glassmorphism V4 (Aero Edition) */
-  --glass-bg: rgba(30, 41, 59, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(24px);
+  /* Glassmorphism V5 (Aero Glow Edition) */
+  --glass-bg: rgba(30, 41, 59, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(28px);
 
-  /* High-End Shadows */
+  /* High-End Shadows & Glows */
   --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.6);
-  --shadow-button: 0 8px 16px -4px rgba(33, 158, 188, 0.4);
-  --shadow-premium: 0 25px 60px -12px rgba(0, 0, 0, 0.8);
+  --shadow-button: 0 8px 16px -4px rgba(33, 158, 188, 0.35);
+  --shadow-premium: 0 30px 70px -15px rgba(0, 0, 0, 0.8);
+  --glow-teal: 0 0 20px rgba(33, 158, 188, 0.2);
+  --glow-amber: 0 0 20px rgba(255, 183, 3, 0.2);
 
   /* Typography */
   --font-main: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
@@ -41,6 +41,26 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-midnight);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 2px solid var(--color-midnight);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-teal);
 }
 
 * {
@@ -71,20 +91,20 @@ h4 {
   font-family: 'Outfit', sans-serif;
   color: #F8FAFC;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 button {
-  border-radius: 16px;
+  border-radius: 18px;
   border: none;
-  padding: 0.8em 1.6em;
+  padding: 0.9em 1.8em;
   font-size: 0.95rem;
   font-weight: 700;
   font-family: inherit;
   background-color: var(--color-teal);
   color: white;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -92,8 +112,8 @@ button {
 }
 
 button:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-button);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-button), var(--glow-teal);
 }
 
 button:active {
@@ -105,22 +125,22 @@ button:active {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  border-radius: 40px;
+  border-radius: 42px;
   padding: 3rem;
   box-shadow: var(--shadow-soft);
-  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .glass-card:hover {
   box-shadow: var(--shadow-premium);
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.2);
   background: rgba(45, 55, 72, 0.45);
 }
 
 .bg-gradient {
   background:
-    radial-gradient(circle at 100% 0%, rgba(255, 183, 3, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(33, 158, 188, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(255, 183, 3, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(33, 158, 188, 0.08) 0%, transparent 40%),
     var(--bg-primary);
 }
 
@@ -131,20 +151,39 @@ button:active {
 }
 
 .secondary-btn {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   color: #F8FAFC;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .icon-btn {
-  padding: 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  padding: 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
   color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.05);
   color: white;
+}
+
+/* Styled Selects & Options - Fixing the "Just White" issue */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem !important;
+}
+
+select option {
+  background-color: var(--color-charcoal-light);
+  color: white;
+  padding: 1rem;
 }

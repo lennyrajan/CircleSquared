@@ -11,6 +11,9 @@ export const RELATIONSHIP_CATEGORIES = [
 ];
 
 export const CADENCES = {
+    DAILY: { id: 1, label: 'Daily' },
+    ALTERNATE_DAYS: { id: 2, label: 'Alternate Days' },
+    TWICE_WEEKLY: { id: 3, label: 'Twice a Week' },
     WEEKLY: { id: 7, label: 'Weekly' },
     BIWEEKLY: { id: 14, label: 'Bi-weekly' },
     MONTHLY: { id: 30, label: 'Monthly' },
